@@ -1,0 +1,258 @@
+// Code your design here
+//....Arithmetic Operators.....
+// module Arithmetic_operator();
+//   reg [3:0] data1;
+//   reg [3:0] data2;
+
+//  initial begin
+//  data1 = 8; // 4-bit value
+//  data2 = 2; // 4-bit value
+
+//    $display ("Add 8+2 = %d", data1 + data2); 
+//    $display ("Sub 8-2	= %d", data1 - data2); 
+//    $display ("Mul 8*2 = %d", data1 * data2); 
+//    $display ("Div 8/2 = %d", data1 / data2); 
+//    $display ("Mod 8%%2 = %d", data1 % data2); 
+//    $display ("pow 8**2 = %0d", 8**2);
+//  end
+// endmodule
+
+
+//.........Relational Operators........
+module Relational_Operators();
+reg [7:0] data1;
+ reg [7:0] data2;
+
+ initial begin
+ data1 = 2'bxx;
+ data2 = 2'b11;
+   $display ("Result for data1 >= data2 : %b", data1 >= data2); 
+   
+data1 = 2'bzz;
+ data2 = 2'b11;
+   $display ("Result for data1 >= data2 : %b", data1 >= data2);  
+
+ data1 = 4;
+ data2 = 4;
+ $display ("Result for data1 <= data2 : %0d", data1 <= data2); 
+
+ data1 = 24;
+ data2 = 5;
+ $display ("Result for data1 > data2 : %0d", data1 > data2);
+ data1 = 22;
+ data2 = 24;
+ $display ("Result for data1 < data2 : %0d", data1 < data2); 
+ end
+endmodule
+
+//............Equality operators....
+/*module Equality_Operators();
+
+  reg [7:0] data1;
+  reg [7:0] data2;
+
+  initial begin
+
+    // Case equality (===) : compares X and Z exactly
+    data1 = 45;
+    data2 = 9;
+    $display("Result for data1(%0d) === data2(%0d) : %0d",
+              data1, data2, data1 === data2);
+
+    data1 = 8'b101x;
+    data2 = 8'b1011;
+    $display("Result for data1(%0b) === data2(%0b) : %0d",
+              data1, data2, data1 === data2);
+
+    data1 = 8'b101x;
+    data2 = 8'b101x;
+    $display("Result for data1(%0b) === data2(%0b) : %0d",
+              data1, data2, data1 === data2);
+
+    data1 = 8'b101z;
+    data2 = 8'b1z00;
+    $display("Result for data1(%0b) !== data2(%0b) : %0d",
+              data1, data2, data1 !== data2);
+
+    // Logical equality (==) : X/Z causes unknown (X) result
+    data1 = 39;
+    data2 = 39;
+    $display("Result for data1(%0d) == data2(%0d) : %0d",
+              data1, data2, data1 == data2);
+
+    data1 = 14;
+    data2 = 14;
+    $display("Result for data1(%0d) != data2(%0d) : %0d",
+              data1, data2, data1 != data2);
+    data1 = 8'b101x;
+    data2 = 8'b101x;
+    $display("Result for data1(%0b) == data2(%0b) : %0d",
+              data1, data2, data1 == data2);
+
+    $finish;
+  end
+endmodule*/
+//.... Logical Operators....
+/*module  Logical_Operators();
+   reg [7:0] data1;
+   reg [7:0] data2;
+
+ initial begin
+ // Logical AND (&&): returns 1 only if BOTH operands are non-zero
+ data1 = 45; data2 = 9;
+ $display ("Result of data1(%0d) && data2(%0d) : %0d", data1, data2, data1 && data2); // 1 (both non-zero)
+
+ data1 = 0; data2 = 4;
+ $display ("Result of data1(%0d) && data2(%0d) : %0d", data1, data2, data1 && data2); // 0 (data1 is zero)
+
+ data1 = 'dx; data2 = 3;
+ $display ("Result of data1(%0d) && data2(%0d) : %0d", data1, data2, data1 && data2); // x (data1 has X)
+
+ data1 = 'b101z; data2 = 5;
+ $display ("Result of data1(%0d) && data2(%0d) : %0d", data1, data2, data1 && data2); // 1 (Z treated as non-zero)
+
+ // Logical OR (||): returns 1 if EITHER operand is non-zero
+ data1 = 45; data2 = 9;
+ $display ("Result of data1(%0d) || data2(%0d) : %0d", data1, data2, data1 || data2); // 1 (both non-zero)
+
+ data1 = 0; data2 = 4;
+ $display ("Result of data1(%0d) || data2(%0d) : %0d", data1, data2, data1 || data2); // 1 (data2 non-zero)
+
+ data1 = 'dx; data2 = 3;
+ $display ("Result of data1(%0d) || data2(%0d) : %0d", data1, data2, data1 || data2); // 1 (data2 non-zero, short-circuit)
+
+ data1 = 'b101z; data2 = 5;
+ $display ("Result of data1(%0d) || data2(%0d) : %0d", data1, data2, data1 || data2); // 1 (both non-zero)
+
+ // Logical NOT (!): converts non-zero to 0, zero to 1
+ data1 = 4;
+ $display ("Result of !data1(%0d) : %0d", data1, !data1); // 0 (4 is non-zero)
+
+ data1 = 0;
+ $display ("Result of !data1(%0d) : %0d", data1, !data1); // 1 (0 becomes 1)
+ end
+endmodule*/
+
+//.....Bitwise Operators....
+/*module bitwise_Operators();
+  reg data1=1;
+  reg data2=0;
+  reg data3='x;
+  reg data4='z;
+  initial begin
+ //Bitwise And operator
+  $display ("Result of (%0b) & (%0b) : %0b", data1, data1, data1 & data1);
+  $display ("Result of (%0b) & (%0b) : %0b", data1, data2, data1 & data2); 
+  $display ("Result of (%0b) & (%0b) : %0b", data1, data3, data1 & data3); 
+  $display ("Result of (%0b) & (%0b) : %0b", data1, data4, data1 & data4);  
+  $display ("Result of (%0b) & (%0b) : %0b", data2, data2, data2 & data2);
+  $display ("Result of (%0b) & (%0b) : %0b", data2, data3, data2 & data3); 
+  $display ("Result of (%0b) & (%0b) : %0b", data2, data4, data2 & data4); 
+  $display ("Result of (%0b) & (%0b) : %0b", data3, data3, data3 & data3);
+  $display ("Result of (%0b) & (%0b) : %0b", data3, data4, data3 & data4); 
+  $display ("Result of (%0b) & (%0b) : %0b", data4, data4, data4 & data4);
+    
+    //Bitwise OR operator
+    $display ("Result of (%0b) | (%0b) : %0b", data1, data1, data1 | data1);
+    $display ("Result of (%0b) | (%0b) : %0b", data1, data2, data1 | data2); 
+    $display ("Result of (%0b) | (%0b) : %0b", data1, data3, data1 | data3); 
+    $display ("Result of (%0b) | (%0b) : %0b", data1, data4, data1 | data4);  
+    $display ("Result of (%0b) | (%0b) : %0b", data2, data2, data2 | data2);
+    $display ("Result of (%0b) | (%0b) : %0b", data2, data3, data2 | data3); 
+    $display ("Result of (%0b) | (%0b) : %0b", data2, data4, data2 | data4); 
+    $display ("Result of (%0b) | (%0b) : %0b", data3, data3, data3 | data3);
+    $display ("Result of (%0b) | (%0b) : %0b", data3, data4, data3 | data4); 
+    $display ("Result of (%0b) | (%0b) : %0b", data4, data4, data4 | data4);
+    
+    //Bitwise Not operator
+    $display ("Result of (%0b) : %0b", data1, ~data1); 
+    $display ("Result of (%0b) : %0b", data2, ~data2);
+    $display ("Result of (%0b) : %0b", data3, ~data3);
+    $display ("Result of (%0b) : %0b", data4, ~data4);
+    
+    //Bitwise NAnd operator
+    $display ("Result of (%0b) ~& (%0b) : %0b", data1, data1, ~(data1 & data1));
+    $display ("Result of (%0b) ~& (%0b) : %0b", data1, data2,~( data1 & data2)); 
+    $display ("Result of (%0b) ~& (%0b) : %0b", data1, data3,~( data1 & data3)); 
+    $display ("Result of (%0b) ~& (%0b) : %0b", data1, data4,~( data1 & data4));  
+    $display ("Result of (%0b) ~& (%0b) : %0b", data2, data2,~( data2 & data2));
+    $display ("Result of (%0b) ~& (%0b) : %0b", data2, data3, ~(data2 & data3)); 
+    $display ("Result of (%0b) ~& (%0b) : %0b", data2, data4, ~(data2 & data4)); 
+    $display ("Result of (%0b) ~& (%0b) : %0b", data3, data3,~( data3 & data3));
+    $display ("Result of (%0b) ~& (%0b) : %0b", data3, data4, ~(data3 & data4)); 
+    $display ("Result of (%0b) ~& (%0b) : %0b", data4, data4, ~(data4 & data4));
+    
+    
+    //Bitwise NOR operator
+    $display ("Result of (%0b) | (%0b) : %0b", data1, data1, ~(data1 | data1));
+    $display ("Result of (%0b) ~| (%0b) : %0b", data1, data2, ~(data1 | data2)); 
+    $display ("Result of (%0b) ~| (%0b) : %0b", data1, data3,~( data1 | data3)); 
+    $display ("Result of (%0b) ~| (%0b) : %0b", data1, data4,~( data1 | data4));  
+    $display ("Result of (%0b) ~| (%0b) : %0b", data2, data2, ~(data2 | data2));
+    $display ("Result of (%0b) ~| (%0b) : %0b", data2, data3, ~(data2 | data3)); 
+    $display ("Result of (%0b) ~| (%0b) : %0b", data2, data4,~( data2 | data4)); 
+    $display ("Result of (%0b) ~| (%0b) : %0b", data3, data3, ~(data3 | data3));
+    $display ("Result of (%0b) ~| (%0b) : %0b", data3, data4, ~(data3 | data4)); 
+    $display ("Result of (%0b) ~| (%0b) : %0b", data4, data4, ~(data4 | data4));
+    
+    
+     //Bitwise XOR operator
+    $display ("Result of (%0b) ^ (%0b) : %0b", data1, data1, data1 ^ data1);
+    $display ("Result of (%0b) ^ (%0b) : %0b", data1, data2, data1 ^ data2); 
+    $display ("Result of (%0b) ^ (%0b) : %0b", data1, data3, data1 ^ data3); 
+    $display ("Result of (%0b) ^ (%0b) : %0b", data1, data4, data1 ^ data4);  
+    $display ("Result of (%0b) ^ (%0b) : %0b", data2, data2, data2 ^ data2);
+    $display ("Result of (%0b) ^ (%0b) : %0b", data2, data3, data2 ^ data3); 
+    $display ("Result of (%0b) ^ (%0b) : %0b", data2, data4, data2 ^ data4); 
+    $display ("Result of (%0b) ^ (%0b) : %0b", data3, data3, data3 ^ data3);
+    $display ("Result of (%0b) ^ (%0b) : %0b", data3, data4, data3 ^ data4); 
+    $display ("Result of (%0b) ^ (%0b) : %0b", data4, data4, data4 ^ data4);
+    
+    //Bitwise XNOR operator
+    $display ("Result of (%0b) ~^ (%0b) : %0b", data1, data1, ~(data1 ^ data1));
+    $display ("Result of (%0b) ~^ (%0b) : %0b", data1, data2, ~(data1 ^ data2));
+    $display ("Result of (%0b) ~^ (%0b) : %0b", data1, data3, ~(data1 ^ data3)); 
+    $display ("Result of (%0b) ~^ (%0b) : %0b", data1, data4,~(data1 ^ data4));  
+    $display ("Result of (%0b) ~^ (%0b) : %0b", data2, data2, ~(data2 ^ data2));
+    $display ("Result of (%0b) ~^ (%0b) : %0b", data2, data3,~(data2 ^ data3));
+    $display ("Result of (%0b) ~^ (%0b) : %0b", data2, data4, ~(data2 ^ data4));
+    $display ("Result of (%0b) ~^ (%0b) : %0b", data3, data3, ~(data3 ^ data3));
+    $display ("Result of (%0b) ~^ (%0b) : %0b", data3, data4, ~(data3 ^ data4));
+    $display ("Result of (%0b) ~^ (%0b) : %0b", data4, data4,~(data4 ^ data4));
+    
+    
+  end
+endmodule*/
+
+//........Shift Operators
+/*module Shift_Operators();
+  reg [3:0]a=4'b1101;
+  reg signed [3:0]b=4'b1001;
+  initial begin
+  //logical_shift
+    $display("Result of (%b) << 1 : %0b", a ,a << 1);
+    $display("Result of  (%b) >> 1: %0b", a ,a >> 1);
+    
+  //Arithmetic shift 
+    $display("Result of  (%b) <<<  1: %0b", b , b <<< 1);
+    $display("Result of  (%b) >>> 1: %0b", b ,b  >>> 1);
+    
+    $display("Result of (%b) <<< 1 : %0b", a ,$signed(a) <<< 1);
+    $display("Result of  (%b) >>> 1: %0b", a ,$signed(a) >>> 1);
+  end
+endmodule*/
+
+
+//.......Reduction operators...........
+module Reduction_operators();
+  reg [11:0]a=12'b000111xxxzzz;
+  initial begin
+    $display("Result of %b is : %0b ", a , &a );
+    $display("Result of %b is : %0b ", a , |a );
+    $display("Result of %b is : %0b ", a , ~a );
+    $display("Result of %b is : %0b ", a , ~&a );
+    $display("Result of %b is : %0b ", a , ~|a );
+    $display("Result of %b is : %0b ", a , ^a );
+    $display("Result of %b is : %0b ", a , ~^a );
+  end
+endmodule
