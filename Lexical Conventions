@@ -1,0 +1,50 @@
+/*Lexical_conventions are any thing that can be write in verilog like keywords,strings,identifiers,datatypes,delimiters(; : " , .)etc.*/
+module number();
+  reg [2:0]y;
+  parameter WIDTH = 8;
+
+    // Variable declarations
+    reg  [WIDTH-1:0] a, b;
+    wire [WIDTH-1:0] sum;
+  reg w,x;
+  wire z;
+    integer i;
+  integer 	int_a; 				// Integer variable (32-bit signed)
+ real 		real_b; 			// Real variable (64-bit floating point)
+ time 		time_c; 
+
+    // Number formats
+    reg [7:0] bin_num = 8'b10101010; // Binary
+    reg [7:0] oct_num = 8'o123;      // Octal
+    reg [7:0] dec_num = 8'd100;      // Decimal
+    reg [7:0] hex_num = 8'hAF;       // Hexadecima
+  assign sum=a+b;//continuous assignment
+  initial begin
+    $display("Its Verilog");//White Space
+    $display("sized=%b",4'd3);
+    $display("unsized=%b",'d3);
+    //operators
+    $display("Unary:z=~x for 0101 is %b",(~4'b0101));//Unary
+    $display("Binary:z=w&x for w=0101 and x=0001 is %b",(4'b0101&4'b0001));//Binary
+    $display("ternary:z=(c<d)?1:0 for c=3 d=6 is %0b",(3<6)?1:0);//ternary 
+    /*Data Types:Nets and variables are the two main groups of data types
+    net--wire(Z)
+    Variable--reg(x)*/
+    //integer:An integer is a general purpose variable of 32-bits wide default value is unknown
+    //real is used to declare floating points default value is 0.0
+    //time is used to store simulation time default value is unknown
+    //realtime variable simply stores time as a floating point quantity.default is 0
+    int_a 	= 32'hcafe_1234; 	// Assign hexadecimal value to integer
+ real_b 	= 0.1234567; 		// Assign floating point value to real
+
+//  #20; 						
+ time_c 	= $time; 			 
+
+ 
+ $display ("int_a 	= 0x%0h", int_a);   // %0h = hexadecimal format
+ $display ("real_b 	= %0.5f", real_b);  // %0.5f = 5 decimal places
+ $display ("time_c 	= %0t", time_c);    // %0t = time format
+
+    
+  end 
+endmodule
