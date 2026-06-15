@@ -1,0 +1,100 @@
+//......................
+
+// module FA(input a,b,cin,output sum,cout);
+//   wire s,c,c1;
+//   xor x1(sum,s,cin);
+//   and a1(c,a,b);
+//   xor x2(s,a,b);
+//   and a2(c1,s,cin);
+//   or(cout,s,c1);
+// endmodule
+
+ //......................
+
+//  module FA(input a,b,cin,output sum,cout);
+//    assign sum=a^b^cin;
+//    assign cout=a&b | b&cin |cin&a;
+//  endmodule
+
+//........................
+// module FA(input a,b,cin,output reg sum,cout);
+//   always@(*)
+//     begin
+//       {cout,sum}=a+b+cin;
+//     end
+// endmodule
+
+//................fa using ha......
+module ha(
+    input a,
+    input b,
+    output sum,
+    output carry
+);
+
+assign sum   = a ^ b;
+assign carry = a & b;
+
+endmodule
+
+module FA(
+    input a,
+    input b,
+    input cin,
+    output sum,
+    output cout
+);
+
+wire s1, c1, c2;
+
+ha HA1 (
+    .a(a),
+    .b(b),
+    .sum(s1),
+    .carry(c1)
+);
+
+ha HA2 (
+    .a(s1),
+    .b(cin),
+    .sum(sum),
+    .carry(c2)
+);
+
+assign cout = c1 | c2;
+
+endmodule
+
+module tb;
+  reg a,b,cin;
+  wire sum,cout;
+  
+  FA dut(a,b,cin,sum,cout);
+  
+  initial begin 
+    $dumpfile("fa.vcd");
+    $dumpvars(0,tb);
+     
+    $monitor("time=%0t  a=%b  b=%b cin=%b | sum=%b carry=%b",$time,a,b,cin,sum,cout);
+    a=0;b=0;cin=0;
+    #1
+    a=0;b=0;cin=1;
+    #1
+      a=0;b=1;cin=0;
+    #1
+       a=0;b=1;cin=1;
+    #1
+      a=1;b=0;cin=0;
+    #1
+    a=1;b=0;cin=1;
+    #1
+      a=1;b=1;cin=0;
+    #1
+      a=1;b=1;cin=1;
+    #1
+   
+    
+
+    $finish;
+  end
+endmodule
