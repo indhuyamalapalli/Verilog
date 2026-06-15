@@ -1,0 +1,71 @@
+// Code your design here
+// module fs(input a,b,c,output d,B);
+//   wire d1,b1,b2,n1,n2;
+//   xor x1(d1,a,b);
+//   not n0(n2,d1);
+//   xor x2(d,d1,c);
+//   not n(n1,a);
+//   and a1(b1,n1,b);
+//   and a2(b2,c,n2);
+//   or(B,b1|b2);
+// endmodule
+
+// module fs(input a,b,c,output d,B);
+//   assign d=a^b^c;
+//   assign B=~a&b | c&(~(a^b));
+// endmodule
+
+// module fs(input a,b,c,output reg d,B);
+//   always@(*)
+//     begin
+//       {B,d}=a-b-c;
+//     end
+// endmodule
+module HS(input a,b,output reg D,B);
+  assign D=a^b;
+  assign B=~a&b;
+endmodule
+
+module FS(input a,b,c,output D,B);
+  wire d1,b1,b2;
+  HS hs1(.a(a),.b(b),.D(d1),.B(b1));
+  HS hs2(.a(d1),.b(c),.D(D),.B(b2));
+  assign B=b1|b2;
+endmodule
+
+
+// Code your testbench here
+// or browse Examples
+module tb;
+  reg a,b,c;
+  wire d,B;
+  
+  FS dut(a,b,c,d,B);
+  
+  initial begin 
+    $dumpfile("fs.vcd");
+    $dumpvars(0,tb);
+     
+    $monitor("time=%0t  a=%b  b=%b c=%b | diff=%b barrow=%b",$time,a,b,c,d,B);
+    a=0;b=0;c=0;
+    #1
+    a=0;b=0;c=1;
+    #1
+      a=0;b=1;c=0;
+    #1
+       a=0;b=1;c=1;
+    #1
+      a=1;b=0;c=0;
+    #1
+    a=1;b=0;c=1;
+    #1
+      a=1;b=1;c=0;
+    #1
+      a=1;b=1;c=1;
+    #1
+   
+    
+
+    $finish;
+  end
+endmodule
