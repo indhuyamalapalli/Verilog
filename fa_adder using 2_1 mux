@@ -1,0 +1,47 @@
+module mux(input i0,i1,sel,output y);
+  assign y=sel?i1:i0;
+endmodule
+module fa_adder(input a,b,cin,output carry,sum);
+  wire w1,w2,w3;
+  mux m1(1,0,a,w1);//w1=~a
+  mux m2(a,w1,b,w2);//w2=a^b
+  mux m3(1,0,w2,w3);//w3=a~^b
+  mux m4(w2,w3,cin,sum);//sum=a^b^c
+  mux m5(0,b,a,w4);//w4=a&b
+  mux m6(0,w2,cin,w5);//(a^b)&c
+  mux m7(w5,1,w4,carry);//carry=(a&b)|((a^b)&c
+endmodule
+
+module tb;
+  reg a,b,cin;
+  wire sum,carry;
+  
+  fa_adder dut(a,b,cin,carry,sum);
+  
+  initial begin 
+    $dumpfile("fa.vcd");
+    $dumpvars(0,tb);
+     
+    $monitor("time=%0t  a=%b  b=%b cin=%b | carry=%b  sum=%b",$time,a,b,cin,carry,sum);
+    a=0;b=0;cin=0;
+    #1
+    a=0;b=0;cin=1;
+    #1
+      a=0;b=1;cin=0;
+    #1
+       a=0;b=1;cin=1;
+    #1
+      a=1;b=0;cin=0;
+    #1
+    a=1;b=0;cin=1;
+    #1
+      a=1;b=1;cin=0;
+    #1
+      a=1;b=1;cin=1;
+    #1
+   
+    
+
+    $finish;
+  end
+endmodule
