@@ -1,0 +1,23 @@
+module mux(input i0,i1,sel,output y);
+  assign y=sel?i1:i0;
+endmodule
+module ha_adder(input a,b,output carry,sum);
+  wire w;
+  mux m1(0,a,b,carry);
+  mux m2(1,0,b,w);
+  mux m3(b,w,a,sum);
+endmodule
+
+module half_adder_tb();
+  reg a,b;
+  wire carry,sum;
+  ha_adder dut(a,b,carry,sum);
+  initial begin
+    $monitor("Time=%0t a=%b b=%b | half_adder_carry=%b half_adder_sum=%b",$time,a,b,carry,sum);
+    a=0;b=0;#1
+    a=0;b=1;#1
+    a=1;b=0;#1
+    a=1;b=1;#1
+  $finish;
+  end
+endmodule
