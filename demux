@@ -1,0 +1,21 @@
+module demux(input a,sel,output [1:0]y);
+  assign y[0]=~sel&a;
+  assign  y[1]=sel&a;
+endmodule
+
+module tb;
+  reg a,sel;
+  wire [1:0]y;
+  demux dut (a,sel,y);
+  integer i;
+  initial begin
+    $monitor("Time=%0t a=%b sel=%b | y1=%b y0=%b ", $time,a,sel,y[1],y[0]);
+    for(i=0;i<4;i=i+1)
+        begin
+          {a,sel}=i;
+          #1;
+        end
+      $finish;
+  end
+  
+ endmodule
