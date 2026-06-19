@@ -1,0 +1,43 @@
+module excess3_to_bcd(
+    input  [3:0] excess3,
+    output reg [3:0] bcd
+);
+
+always @(*) begin
+    if(excess3 >= 4'd3 && excess3 <= 4'd12)
+        bcd = excess3 - 4'd3;
+    else
+        bcd = 4'bxxxx;   // Invalid Excess-3 code
+end
+
+endmodule
+
+
+module tb;
+
+reg  [3:0] excess3;
+wire [3:0] bcd;
+
+excess3_to_bcd dut (
+    .excess3(excess3),
+    .bcd(bcd)
+);
+
+integer i;
+
+initial begin
+    $dumpfile("excess3_to_bcd.vcd");
+    $dumpvars(0, tb);
+
+    $monitor("Time=%0t Excess3=%b (%0d) | BCD=%b",
+              $time, excess3, excess3, bcd);
+
+    for(i = 0; i < 16; i = i + 1) begin
+        excess3 = i;
+        #1;
+    end
+
+    $finish;
+end
+
+endmodule
