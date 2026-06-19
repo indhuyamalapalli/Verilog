@@ -1,0 +1,114 @@
+// module mux4_1(input [3:0]i,input[1:0]sel,output y);
+//   assign y=sel[1]?(sel[0]?i[3]:i[2]):(sel[0]?i[1]:i[0]);
+// endmodule
+
+// module mux4_1#(parameter N=4)(input [N-1:0]i,input[$clog2(N):0]sel,output y);
+//   assign y=sel[(N/2)-1]?(sel[(N/2)-2]?i[N-1]:i[N-2]):(sel[(N/2)-2]?i[(N/2)-1]:i[(N/2)-2]);
+// endmodule
+
+module mux4_1#(parameter N=4)(input [N-1:0]i,input[$clog2(N):0]sel,output y);
+  assign y=i[sel];
+endmodule
+
+module tb;
+  parameter N=8;
+  reg [N-1:0]i;
+  reg [N-1:0]sel;
+  wire y;
+  mux4_1 #(N) dut(i,sel,y);
+    integer j, k;
+  initial begin
+    $dumpfile("mux.vcd");
+    $dumpvars(1,tb);
+    $monitor("time=%0t i=%b sel=%0b | y=%b" , $time,i,sel,y);
+// i=4'b0000; sel=2'b00; #1;
+// i=4'b0000; sel=2'b01; #1;
+// i=4'b0000; sel=2'b10; #1;
+// i=4'b0000; sel=2'b11; #1;
+
+// i=4'b0001; sel=2'b00; #1;
+// i=4'b0001; sel=2'b01; #1;
+// i=4'b0001; sel=2'b10; #1;
+// i=4'b0001; sel=2'b11; #1;
+
+// i=4'b0010; sel=2'b00; #1;
+// i=4'b0010; sel=2'b01; #1;
+// i=4'b0010; sel=2'b10; #1;
+// i=4'b0010; sel=2'b11; #1;
+
+// i=4'b0011; sel=2'b00; #1;
+// i=4'b0011; sel=2'b01; #1;
+// i=4'b0011; sel=2'b10; #1;
+// i=4'b0011; sel=2'b11; #1;
+
+// i=4'b0100; sel=2'b00; #1;
+// i=4'b0100; sel=2'b01; #1;
+// i=4'b0100; sel=2'b10; #1;
+// i=4'b0100; sel=2'b11; #1;
+
+// i=4'b0101; sel=2'b00; #1;
+// i=4'b0101; sel=2'b01; #1;
+// i=4'b0101; sel=2'b10; #1;
+// i=4'b0101; sel=2'b11; #1;
+
+// i=4'b0110; sel=2'b00; #1;
+// i=4'b0110; sel=2'b01; #1;
+// i=4'b0110; sel=2'b10; #1;
+// i=4'b0110; sel=2'b11; #1;
+
+// i=4'b0111; sel=2'b00; #1;
+// i=4'b0111; sel=2'b01; #1;
+// i=4'b0111; sel=2'b10; #1;
+// i=4'b0111; sel=2'b11; #1;
+
+// i=4'b1000; sel=2'b00; #1;
+// i=4'b1000; sel=2'b01; #1;
+// i=4'b1000; sel=2'b10; #1;
+// i=4'b1000; sel=2'b11; #1;
+
+// i=4'b1001; sel=2'b00; #1;
+// i=4'b1001; sel=2'b01; #1;
+// i=4'b1001; sel=2'b10; #1;
+// i=4'b1001; sel=2'b11; #1;
+
+// i=4'b1010; sel=2'b00; #1;
+// i=4'b1010; sel=2'b01; #1;
+// i=4'b1010; sel=2'b10; #1;
+// i=4'b1010; sel=2'b11; #1;
+
+// i=4'b1011; sel=2'b00; #1;
+// i=4'b1011; sel=2'b01; #1;
+// i=4'b1011; sel=2'b10; #1;
+// i=4'b1011; sel=2'b11; #1;
+
+// i=4'b1100; sel=2'b00; #1;
+// i=4'b1100; sel=2'b01; #1;
+// i=4'b1100; sel=2'b10; #1;
+// i=4'b1100; sel=2'b11; #1;
+
+// i=4'b1101; sel=2'b00; #1;
+// i=4'b1101; sel=2'b01; #1;
+// i=4'b1101; sel=2'b10; #1;
+// i=4'b1101; sel=2'b11; #1;
+
+// i=4'b1110; sel=2'b00; #1;
+// i=4'b1110; sel=2'b01; #1;
+// i=4'b1110; sel=2'b10; #1;
+// i=4'b1110; sel=2'b11; #1;
+
+// i=4'b1111; sel=2'b00; #1;
+// i=4'b1111; sel=2'b01; #1;
+// i=4'b1111; sel=2'b10; #1;
+// i=4'b1111; sel=2'b11; #1;
+  
+
+    for (j = 0; j < 256; j = j + 1)
+      for (k = 0; k < 8; k = k + 1)
+         begin
+            i   = j;
+            sel = k;
+            #1;
+        end
+    $finish;
+  end
+endmodule
