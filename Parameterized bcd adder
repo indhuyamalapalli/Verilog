@@ -1,0 +1,65 @@
+module fa(
+    input a,b,cin,
+    output sum,carry
+);
+
+assign sum   = a ^ b ^ cin;
+assign carry = (a & b) | ((a ^ b) & cin);
+
+endmodule
+
+module rca(
+    input  [3:0] a,
+    input  [3:0] b,
+    input        cin,
+    output [3:0] sum,
+    output       cout
+);
+
+wire c1,c2,c3;
+
+fa fa0(a[0],b[0],cin,sum[0],c1);
+fa fa1(a[1],b[1],c1 ,sum[1],c2);
+fa fa2(a[2],b[2],c2 ,sum[2],c3);
+fa fa3(a[3],b[3],c3 ,sum[3],cout);
+
+endmodule
+
+module bcd_adder#(parameter N=2)(input [4*N-1:0]a,b,output [4*N-1:0]bcd_sum,output bcd_carry);
+  wire [4*N-1:0]temp_sum;
+  wire [N:0] temp_carry;
+  wire  [N-1:0]correction;
+  wire  [N-1:0] cc,raw;
+  assign temp_carry[0]=0;
+  genvar i;
+  generate
+    for(i=0;i<N;i=i+1)
+      begin
+        rca r1(a[4*i+3:4*i],b[4*i+3:4*i],temp_carry[i],temp_sum[4*i+3:4*i],raw[i]);
+        assign correction[i]=temp_sum[4*i+3:4*i]>4'd9||raw[i]==1;
+        assign {cc[i],bcd_sum[4*i+3:4*i]}=correction[i]?temp_sum[4*i+3:4*i]+4'd6:temp_sum[4*i+3:4*i];
+        assign temp_carry[i+1]=temp_sum[4*i+3:4*i]>4'd9?cc[i]:raw[i];
+      end
+  
+  endgenerate
+    assign bcd_carry=temp_carry[N];
+endmodule
+
+
+
+module tb;
+  parameter N=2;
+  reg [4*N-1:0] a,b;
+  wire [4*N-1:0] sum;
+  wire c;
+  
+  bcd_adder #(N)dut(a,b,sum,c);
+  
+  initial begin
+    $monitor("a=%b b=%b carry=%b sum=%b",a,b,c,sum);
+    
+    a=8'b00011001;b=8'b01000001;#1
+    a=8'b10001000;b=8'b01000100;#1
+    $finish;
+  end
+endmodule
