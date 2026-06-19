@@ -1,0 +1,139 @@
+module mux(input i0,i1,sel,output y);
+  assign y=sel?i1:i0;
+endmodule
+
+//----------------------------
+// module not_gate(input a,output y);
+//   mux m0(1,0,a,y);
+// endmodule
+//-----------------------------------
+// module and_gate(input a,b,output y);
+//   mux m1(0,a,b,y);
+// endmodule
+//--------------------------------------
+// module or_gate(input a,b,output y);
+//   mux m2(b,1,a,y);
+// endmodule
+//-------------------------------------
+// module nand_gate(input a,b,output y);
+//   wire x;
+//   mux m3(1,0,b,x);
+//   mux m4(1,x,a,y);
+// endmodule
+//-----------------------------
+// module nor_gate(input a,b,output y);
+//   wire w;
+//   mux m5(1,0,a,w);
+//   mux m6(w,0,b,y);
+// endmodule
+//----------------------------
+// module xor_gate(input a,b,output y);
+//   wire t;
+//   mux m7(1,0,b,t);
+//   mux m8(b,t,a,y);
+// endmodule
+//-------------------------
+module xnor_gate(input a,b,output y);
+  wire t;
+  mux m7(1,0,b,t);
+  mux m8(t,b,a,y);
+endmodule
+
+
+//---------------------
+// module not_tb();
+//   reg a;
+//   wire y;
+//   not_gate dut(a,y);
+//   initial begin
+//     $monitor("Time=%0t a=%b |not_gate_output=%b",$time,a,y);
+//     a=0;#1
+//     a=1;#1
+//     $finish;
+//   end
+// endmodule
+
+//---------------------
+// module and_tb();
+//   reg a,b;
+//   wire y;
+//   and_gate dut(a,b,y);
+//   initial begin
+//     $monitor("Time=%0t a=%b b=%b | and_gate_output=%b",$time,a,b,y);
+//     a=0;b=0;#1
+//     a=0;b=1;#1
+//     a=1;b=0;#1
+//     a=1;b=1;#1
+//   $finish;
+//   end
+// endmodule
+//---------------
+// module or_tb();
+//   reg a,b;
+//   wire y;
+//   or_gate dut(a,b,y);
+//   initial begin
+//     $monitor("Time=%0t a=%b b=%b | or_gate_output=%b",$time,a,b,y);
+//     a=0;b=0;#1
+//     a=0;b=1;#1
+//     a=1;b=0;#1
+//     a=1;b=1;#1
+//   $finish;
+//   end
+// endmodule
+//------------------
+// module nand_tb();
+//   reg a,b;
+//   wire y;
+//   nand_gate dut(a,b,y);
+//   initial begin
+//     $monitor("Time=%0t a=%b b=%b | nand_gate_output=%b",$time,a,b,y);
+//     a=0;b=0;#1
+//     a=0;b=1;#1
+//     a=1;b=0;#1
+//     a=1;b=1;#1
+//   $finish;
+//   end
+// endmodule
+//-------------------
+// module nor_tb();
+//   reg a,b;
+//   wire y;
+//   nor_gate dut(a,b,y);
+//   initial begin
+//     $monitor("Time=%0t a=%b b=%b | nor_gate_output=%b",$time,a,b,y);
+//     a=0;b=0;#1
+//     a=0;b=1;#1
+//     a=1;b=0;#1
+//     a=1;b=1;#1
+//   $finish;
+//   end
+// endmodule
+//--------------
+// module xor_tb();
+//   reg a,b;
+//   wire y;
+//   xor_gate dut(a,b,y);
+//   initial begin
+//     $monitor("Time=%0t a=%b b=%b | xor_gate_output=%b",$time,a,b,y);
+//     a=0;b=0;#1
+//     a=0;b=1;#1
+//     a=1;b=0;#1
+//     a=1;b=1;#1
+//   $finish;
+//   end
+// endmodule
+//-------------------
+module xnor_tb();
+  reg a,b;
+  wire y;
+  xnor_gate dut(a,b,y);
+  initial begin
+    $monitor("Time=%0t a=%b b=%b | xnor_gate_output=%b",$time,a,b,y);
+    a=0;b=0;#1
+    a=0;b=1;#1
+    a=1;b=0;#1
+    a=1;b=1;#1
+  $finish;
+  end
+endmodule
