@@ -1,0 +1,85 @@
+module FA(
+    input a,b,cin,
+    output s,cout
+);
+    assign s    = a ^ b ^ cin;
+    assign cout = (a & b) | (b & cin) | (cin & a);
+endmodule
+
+module ripple(
+    input  [3:0] a,b,
+    input        cin,
+    output [3:0] sum,
+    output       cout
+);
+    wire c1,c2,c3;
+
+    FA a1(a[0], b[0], cin, sum[0], c1);
+    FA a2(a[1], b[1], c1 , sum[1], c2);
+    FA a3(a[2], b[2], c2 , sum[2], c3);
+    FA a4(a[3], b[3], c3 , sum[3], cout);
+
+endmodule
+
+module bcd_adder(
+    input  [3:0] a,
+    input  [3:0] b,
+    output [3:0] bcd_sum,
+    output       bcd_carry
+);
+
+    wire [3:0] temp_sum;
+    wire       temp_carry;
+    wire       correction;
+
+    ripple r1(
+        a,
+        b,
+        1'b0,
+        temp_sum,
+        temp_carry
+    );
+
+    assign correction = temp_carry || (temp_sum > 4'd9);
+
+    assign bcd_sum = correction ? (temp_sum + 4'd6) : temp_sum;
+
+    assign bcd_carry = correction;
+
+endmodule
+
+
+module tb_bcd_adder;
+
+    reg  [3:0] a, b;
+    wire [3:0] bcd_sum;
+    wire       bcd_carry;
+
+    bcd_adder dut (
+        .a(a),
+        .b(b),
+        .bcd_sum(bcd_sum),
+        .bcd_carry(bcd_carry)
+    );
+
+    initial begin
+      
+      $monitor("Time=%0t a=%b b=%b | bcd_carry=%b bcd_sum=%b",
+                 $time, a, b, bcd_carry, bcd_sum);
+
+        // Test cases
+
+        a = 4'd0; b = 4'd0; #10;   // 0 + 0 = 0
+        a = 4'd2; b = 4'd3; #10;   // 2 + 3 = 5
+        a = 4'd4; b = 4'd5; #10;   // 4 + 5 = 9
+        a = 4'd5; b = 4'd5; #10;   // 5 + 5 = 10
+        a = 4'd7; b = 4'd5; #10;   // 7 + 5 = 12
+        a = 4'd8; b = 4'd8; #10;   // 8 + 8 = 16
+        a = 4'd9; b = 4'd9; #10;   // 9 + 9 = 18
+        a = 4'd6; b = 4'd9; #10;   // 6 + 9 = 15
+        a = 4'd1; b = 4'd8; #10;   // 1 + 8 = 9
+
+        $finish;
+    end
+
+endmodule
