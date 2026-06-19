@@ -1,0 +1,46 @@
+module excess3_to_binary(
+    input  [2:0] ex_in,
+    output reg [2:0] bin_out
+);
+
+always @(*) begin
+    case(ex_in)
+        3'b011: bin_out = ex_in - 3; // 0
+        3'b100: bin_out = ex_in - 3; // 1
+        3'b101: bin_out = ex_in - 3; // 2
+        3'b110: bin_out = ex_in - 3; // 3
+        3'b111: bin_out = ex_in - 3; // 4
+        default: bin_out = 3'bxxx;
+    endcase
+end
+
+endmodule
+
+module tb;
+
+reg  [2:0] ex_in;
+wire [2:0] bin_out;
+
+excess3_to_binary dut (
+    .ex_in(ex_in),
+    .bin_out(bin_out)
+);
+
+integer i;
+
+initial begin
+    $dumpfile("excess3_to_binary.vcd");
+    $dumpvars(0, tb);
+
+    $monitor("Time=%0t ex_in=%b bin_out=%b",
+              $time, ex_in, bin_out);
+
+    for(i=0; i<8; i=i+1) begin
+        ex_in = i;
+        #1;
+    end
+
+    $finish;
+end
+
+endmodule
