@@ -1,0 +1,41 @@
+module majority #(parameter N=4)(input [N-1]a,output reg y);
+  integer i;
+  integer count;
+  always @(*)
+    begin
+      count=0;
+      if(a==0)
+        y=0;
+      else
+        begin
+          
+      for(i=0;i<=N-1;i++)
+        begin
+          if(a[i])
+            count++;
+        end
+    end
+      if(count>=N/2)
+        y=1;
+      else 
+        y=0;
+    end
+endmodule
+
+module tb();
+  parameter N=4;
+  reg [N-1:0]a;
+  wire y;
+  majority #(N)dut(a,y);
+  initial 
+    begin 
+    $dumpvars(0,tb);
+      $dumpfile("majority.vcd");
+     $monitor("$time=%0t a=%b | y=%b",$time,a,y);
+              a=4'b1110;#1
+              a=4'b0110;#1
+              a=4'b0010;#1
+              a=4'b0000;#1
+              $finish;
+       end
+endmodule
