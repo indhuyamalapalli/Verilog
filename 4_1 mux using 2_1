@@ -1,0 +1,28 @@
+module mux2_1(input [1:0]in,input sel,output y);
+  assign y=in[sel];
+endmodule
+module mux4_1(input [3:0]in,input [1:0]sel,output y);
+  wire [1:0]p;
+  mux2_1 m1( in[1:0],sel[0],p[0]);
+  mux2_1 m2( in[3:2],sel[0],p[1]);
+  mux2_1 m3(p,sel[1],y);
+endmodule
+
+module tb;
+  reg [3:0]in;
+  reg [1:0]sel;
+  wire y;
+  mux4_1 dut(in,sel,y);
+  integer i;
+  initial begin
+    $monitor("Time=%0t in=%b sel=%b | y=%b",$time,in,sel,y);
+    $dumpfile("mux.vcd");
+    $dumpvars(1,tb);
+    for(i=0;i<64;i=i+1)
+      begin
+        {in,sel}=i;
+        #1;
+      end
+    $finish;
+  end
+endmodule
