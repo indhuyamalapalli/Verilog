@@ -1,0 +1,21 @@
+module decoderN_1 #(parameter N=4)(input [($clog2(N)-1):0]a,input en,output [N-1:0]y);
+  assign y=en?(1<<a):0;
+endmodule
+
+module tb;
+  integer i;
+  parameter N=4;
+  reg [($clog2(N)-1):0]a;
+  reg en;
+  wire [N-1:0]y;
+  decoderN_1 #(N) dut(a,en,y);
+  initial begin
+    $monitor("Time=%0t en=%b a=%b | y=%b",$time,en,a,y);
+    for(i=0;i<8;i=i+1)
+      begin
+        {en,a}=i;
+        #1;
+      end
+    $finish;
+  end
+endmodule
