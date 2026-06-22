@@ -1,0 +1,36 @@
+//SR Latch DUT
+module srlatch(input S,R,rst,output reg q);
+  always@(*)
+    begin
+      if(rst)
+        q=0;
+      else
+        begin
+      case({S,R})
+        //2'b00:q=q;
+        2'b01:q=0;
+        2'b10:q=1;
+        2'b11:q=1'bx;
+      endcase
+        end
+    end
+endmodule
+
+//SR tast bench
+module tb;
+  reg S,R,rst;
+  wire q;
+  srlatch dut (S,R,rst,q);
+  initial begin
+    $dumpfile("srlatch.vcd");
+    $dumpvars(1,tb);
+    $monitor("Time=%0t rst=%b S=%b R=%b |q=%b",$time,rst,S,R,q);
+    rst=1;S=1;R=0;#1//Time=0 rst=1 S=0 R=0 |q=x
+    rst=0;S=1;R=0;#1
+    rst=0;S=0;R=0;#1
+    rst=0;S=0;R=1;#1
+    rst=0;S=0;R=0;#1
+    rst=0;S=1'bx;R=1'bx;#1
+    $finish;
+  end 
+endmodule
