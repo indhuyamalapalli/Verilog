@@ -1,0 +1,176 @@
+module mealy_no(input clk,rst,din,output reg done);
+  parameter s0=2'b00;
+  parameter s1=2'b01;
+  parameter s2=2'b10;
+  parameter s3=2'b11;
+  reg [1:0]cs,ns;
+  always @(posedge clk or posedge rst)
+    begin
+      if(rst)
+        cs<=s0;
+      else
+        cs<=ns;
+    end
+  always @(cs or din)
+    begin
+      case(cs)
+        s0:begin
+          ns=din?s1:s0;
+          done=0;
+        end
+
+        s1:begin
+          ns=din?s2:s0;
+          done=0;
+        end
+        s2:begin
+          ns=din?s2:s3;
+          done=0;
+        end
+//         s3:begin
+//           ns<=s0;
+//           done<=din;
+//         end
+        s3:begin
+          ns=din?s0:s0;
+          if(din==1)
+            done=1;
+          else
+            done=0;
+        end
+        //default:ns<=s0;
+      endcase
+    end
+endmodule
+    
+
+
+// module mealy_1101(input clk,rst,din,output reg done);
+//   parameter s0=2'b00,s1=2'b01,s2=2'b10,s3=2'b11;
+//   reg [1:0] ps,ns;
+  
+//   //flipflop logic
+  
+//   always @(posedge clk or posedge rst)
+//     begin
+//       if(rst)
+//         begin
+//           ps<=0; 
+//           done<=0;
+//         end
+//       else
+//         ps<=ns;
+//     end
+  
+//   //next  state logic
+  
+//   always @(*)
+//     begin
+//       case(ps)
+//         s0:ns<=din?s1:s0;
+//         s1:ns<=din?s2:s0;
+//         s2:ns<=din?s2:s3;
+//         s3:ns<=s0;
+//         default:ns<=s0;
+//       endcase
+//     end
+  
+//   // output logic
+  
+//   always @(*)
+//     begin
+//       if(ps==s3 && din==1)
+//         done<=1;
+//       else
+//         done<=0;
+//     end
+  
+// endmodule
+
+//test bench
+module tb;
+  reg clk,rst,din,cs,ns;
+  wire done;
+  mealy_no dut (.*);
+  initial clk=1;
+    always #5 clk=~clk;
+  initial begin
+    $dumpfile("mealy_non_overlap.vcd");
+    $dumpvars(0,tb);
+    $monitor("Time=%0t clk=%b rst=%b din=%b cs=%b ns=%b | done=%b",$time,clk,rst,din,dut.cs,dut.ns,done);
+    rst=1;
+    #10
+    rst=0;din=1;
+    #10
+     rst=0;din=1;
+    #10
+     rst=0;din=0;
+    #10
+     rst=0;din=1;
+    #10
+     rst=0;din=1;
+    #10
+     rst=0;din=0;
+    #10
+     rst=0;din=1;
+    #10
+    rst=0;din=1;
+    #10
+     rst=0;din=0;
+    #10
+     rst=0;din=1;
+    #10
+    $finish;
+  end
+endmodule
+
+// module tb;
+//   wire done;
+//   reg clk,rst,din;
+  
+//   mealy_1101 dut(.*);
+  
+//   always #5 clk=~clk;
+//   initial begin
+//     $monitor("Time=%0t  rst=%b din=%b state=%d nstate=%d done=%b",$time,rst,din,dut.ps,dut.ns,done);
+    
+//     $dumpfile("mealy.vcd");
+//     $dumpvars(0,tb);
+    
+//     clk=0;rst=1;din=0;
+//     #5 rst=0;din=1;
+//     #10 din=1;
+//     #10 din=0;
+//     #10 din=1;
+//     #10 din=1;
+//     #10 din=1;
+//     #10 din=0;
+//     #10 din=1;
+//     #5 $finish;
+//   end
+// endmodule
+
+// module tb;
+//   reg clk,rst,din,cs,ns;
+//   wire done;
+//   mealy_no dut (.*);
+//   initial clk=1;
+//     always #5 clk=~clk;
+
+// initial begin
+//           $monitor("Time=%0t clk=%b rst=%b din=%b cs=%b ns=%b | done=%b",$time,clk,rst,din,dut.cs,dut.ns,done);
+//     rst = 1;
+
+//     repeat(2) @(posedge clk);
+//     rst = 0;
+
+//     din = 1; @(posedge clk);
+//     din = 1; @(posedge clk);
+//     din = 0; @(posedge clk);
+//     din = 1; @(posedge clk);
+//     din = 1; @(posedge clk);
+//     din = 0; @(posedge clk);
+
+//     $finish;
+// end
+// endmodule
