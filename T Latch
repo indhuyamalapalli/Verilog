@@ -1,0 +1,36 @@
+//T Latch
+module tlatch(input rst,en,t,output reg q);
+  always@(*)
+    begin
+      if(rst)
+        q=0;
+      else
+        if(en)
+          q=~t;
+    end
+endmodule
+
+//T latch test bench
+
+module tb;
+  reg rst,en,t;
+  wire q;
+  tff dut(rst,en,t,q);
+  initial begin
+    $dumpfile("tlatch.vcd");
+    $dumpvars(1,tb);
+    $monitor("Time=%0t rst=%b en=%b t=%b | q=%b",$time,rst,en,t,q);
+    rst=1;en=0;t=0;#1
+    rst=0;en=1;t=0;#1
+    //rst=0;en=1;t=0;#1Time=0 rst=1 en=0 t=0 | q=0
+                       //Time=1 rst=0 en=1 t=0 | q=1
+                       //Time=3 rst=0 en=0 t=0 | q=1
+    
+    rst=0;en=1;t=1;#1//Time=0 rst=1 en=0 t=0 | q=0
+                     //Time=0 rst=1 en=0 t=0 | q=0
+                     //Time=2 rst=0 en=1 t=1 | q=0
+                     //Time=3 rst=0 en=0 t=0 | q=0
+    rst=0;en=0;t=0;#1
+    $finish;
+  end
+endmodule
