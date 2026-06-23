@@ -1,0 +1,82 @@
+module moore_o(input clk,rst,din,output reg done);
+  parameter s0=2'b00;
+  parameter s1=2'b01;
+  parameter s2=2'b10;
+  parameter s3=2'b11;
+  parameter s4=3'b100;
+  reg [2:0]cs,ns;
+  always @(posedge clk)
+    begin
+      if(rst)
+        cs<=s0;
+      else
+        cs<=ns;
+    end
+  always @(cs or din)
+    begin
+      case(cs)
+        s0:begin
+          ns<=din?s1:s0;
+         done<=0;
+        end
+
+        s1:begin
+          ns<=din?s2:s0;
+          done<=0;
+        end
+        s2:begin
+          ns<=din?s2:s3;
+          done<=0;
+        end
+//         s3:begin
+//           ns<=s0;
+//           done<=din;
+//         end
+        s3:begin
+          ns<=din?s4:s0;
+         done<=0;
+        end
+        s4:begin
+          ns<=din?s2:s3;
+          done<=1;
+        end
+      endcase
+    end
+endmodule
+  module tb;
+  reg clk,rst,din;
+  wire done;
+  moore_o dut (.*);
+  initial clk=1;
+    always #5 clk=~clk;
+  initial begin
+    $dumpfile("moore_overlap.vcd");
+    $dumpvars(1,tb);
+    $monitor("Time=%0t clk=%b rst=%b din=%b | done=%b",$time,clk,rst,din,done);
+    rst=1;
+    #10
+    rst=0;din=1;
+    #10
+     rst=0;din=1;
+    #10
+     rst=0;din=0;
+    #10
+     rst=0;din=1;
+    #10
+     rst=0;din=1;
+    #10
+     rst=0;din=0;
+    #10
+     rst=0;din=1;
+    #10
+    rst=0;din=1;
+    #10
+     rst=0;din=0;
+    #10
+     rst=0;din=1;
+    #10
+       rst=0;din=1;
+    #10
+    $finish;
+  end
+endmodule          
