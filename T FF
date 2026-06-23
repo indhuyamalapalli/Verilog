@@ -1,0 +1,57 @@
+//T FF
+module t_ff(
+    input clk,
+    input rst,
+    input t,
+    output reg q
+);
+
+  always @(posedge clk)
+  begin
+    if (rst)
+      q <= 0;
+    else if (t)
+      q <= ~q;  
+    else
+      q <= q;    
+  end
+
+endmodule
+
+//T FF test bench
+
+module tb;
+
+  reg clk, rst, t;
+  wire q;
+
+  t_ff dut(clk, rst, t, q);
+
+  initial
+    clk = 0;
+
+  always #5 clk = ~clk;
+
+  initial begin
+    $monitor("Time=%0t clk=%0b rst=%0b t=%0b | q=%0b",
+              $time, clk, rst, t, q);
+
+    rst = 1; t = 0;
+    #10;
+
+    rst = 0; t = 1;  // Toggle
+    #10;
+
+    t = 1;           // Toggle again
+    #10;
+
+    t = 0;           // Hold
+    #10;
+
+    t = 1;           // Toggle
+    #10;
+
+    $finish;
+  end
+
+endmodule
