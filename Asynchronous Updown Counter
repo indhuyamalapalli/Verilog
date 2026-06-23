@@ -1,0 +1,44 @@
+// Asynchronous Updown Counter
+module t_ff(input clk, rst, t,
+    output reg q );
+  always @(posedge clk or negedge rst)
+  begin
+    if (!rst)
+      q <= 1'b0;
+    else if (t)
+      q <= ~q;
+  end
+
+endmodule
+
+module ripple_counter(input clk,rst,updown,output reg  [2:0]q);
+  wire counter1,counter2;
+      t_ff t1(clk,rst,1'b1,q[0]);
+  assign counter1 = updown ? ~q[0] : q[0];
+  t_ff t2(counter1,rst,1'b1,q[1]);
+  assign counter2 = updown ? ~q[1] : q[1];
+      t_ff t3(counter2,rst,1'b1,q[2]);
+
+endmodule
+
+//test bench
+
+module tb;
+  reg clk,rst,updown;
+  wire [2:0]q;
+  ripple_counter dut (clk,rst,updown,q);
+  initial clk=0;
+  always #5 clk=~clk;
+  initial begin 
+    $dumpfile("downcounte.vcd");
+    $dumpvars(1,tb);
+    $monitor("Time=%0t  rst=%0b updown=%0b | q=%0d",$time,rst,updown,q);
+    rst=0;
+    #5
+    rst=1;updown=1;
+    #85
+    rst=1;updown=0;
+    #80
+    $finish;
+  end 
+endmodule
