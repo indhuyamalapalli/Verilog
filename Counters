@@ -1,0 +1,95 @@
+//------------------Down counter---------------------------
+// module t_ff(
+//     input clk,
+//     input rst,
+//     input t,
+//     output reg q
+// );
+
+//   always @(posedge clk or negedge rst)
+//   begin
+//     if (!rst)
+//       q <= 1'b0;
+//     else if (t)
+//       q <= ~q;
+//   end
+
+// endmodule
+// module ripple_counter(input clk,rst,output reg  [2:0]q);
+
+//       t_ff t1(clk,rst,1'b1,q[0]);
+//       t_ff t2(q[0],rst,1'b1,q[1]);
+//       t_ff t3(q[1],rst,1'b1,q[2]);
+
+// endmodule
+
+
+//-------------Up counter------------------------
+// module t_ff(
+//     input clk,
+//     input rst,
+//     input t,
+//     output reg q
+// );
+
+//   always @(posedge clk or negedge rst)
+//   begin
+//     if (!rst)
+//       q <= 1'b0;
+//     else if (t)
+//       q <= ~q;
+//   end
+
+// endmodule
+// module ripple_counter(input clk,rst,output reg  [2:0]q);
+
+//   t_ff t1(clk,rst,1'b1,q[0]);
+//   t_ff t2(~q[0],rst,1'b1,q[1]);
+//   t_ff t3(~q[1],rst,1'b1,q[2]);
+
+// endmodule
+
+//using 3 always blocks downcounter
+module ripple_counter(input clk,rst,output reg  [2:0]q);
+  always @(posedge clk or posedge rst)
+    begin
+      if(rst)
+        q[0]<=1'b0;
+      else
+      q[0]<=~q[0];
+    end
+  always @(posedge q[0] or posedge rst)
+    begin
+      if(rst)
+        q[1]<=1'b0;
+      else
+      q[1]<=~q[1];
+    end
+  always @(posedge q[1] or posedge rst)
+    begin
+      if(rst)
+        q[2]<=1'b0;
+      else
+      q[2]<=~q[2];
+    end
+endmodule
+
+//test bench
+
+module tb;
+  reg clk,rst;
+  wire [2:0]q;
+  ripple_counter dut (clk,rst,q);
+  initial clk=1;
+  always #5 clk=~clk;
+  initial begin 
+    $dumpfile("downcounte.vcd");
+    $dumpvars(1,tb);
+    $monitor("Time=%0t clk=%0b rst=%0b | q=%0d",$time,clk,rst,q);
+    rst=1;
+    #10
+    rst=0;
+    #100
+    $finish;
+  end 
+endmodule
