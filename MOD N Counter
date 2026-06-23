@@ -1,0 +1,34 @@
+// MOD N Counter
+
+module mod_N #(parameter N=10)(input clk,rst,output  reg [$clog2(N)-1:0]count);
+  always @(posedge clk)
+    begin
+      if(rst)
+        count<=0;
+      else if(count==N)
+        count<=0;
+      else
+        count=count+1;
+    end
+endmodule
+
+//test  bench
+
+module tb;
+  parameter N=15;
+  reg clk,rst;
+  wire [$clog2(N)-1:0]count;
+  mod_N #(N) dut (.*);
+  initial clk=0;
+  always #5 clk=~clk;
+  initial begin
+    $dumpfile("mod_N.vcd");
+    $dumpvars(1,tb);
+    $monitor("Time=%0t clk=%0b rst=%0b | count=%0d",$time,clk,rst,count);
+    rst=1;
+    #10
+    rst=0;
+    #200
+    $finish;
+  end
+endmodule
