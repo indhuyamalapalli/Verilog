@@ -1,0 +1,29 @@
+//D FF
+module d_ff(input clk,rst,din,output  reg q);
+  always @(posedge clk)
+    begin
+      if(rst)
+        q<=0;
+      else
+        q<=din;
+    end
+endmodule
+
+//D FF test bench
+
+module tb;
+  reg clk,rst,din;
+  wire q;
+  d_ff dut(clk,rst,din,q);
+  initial clk=0;
+  always #5 clk=~clk;
+  initial begin
+    $monitor("Time=%0t clk=%0b rst=%0b din=%0b | q=%0b",$time,clk,rst,din,q);
+    {rst,din}=2'b10;
+    #5 {rst,din}=2'b11;
+    #5 {rst,din}=2'b01;
+    #5 {rst,din}=2'b01;
+    #5 {rst,din}=2'b01;
+    $finish;
+  end
+endmodule
