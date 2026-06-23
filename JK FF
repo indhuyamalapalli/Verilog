@@ -1,0 +1,45 @@
+//JK FF
+module jk_ff(input j,k,clk,rst,output reg q);
+  always @ (negedge clk)
+    begin
+      if(rst)
+        q<=0;
+      else
+        begin
+          case({j,k})
+             2'b00:q=q;
+             2'b01:q=1'b0;
+             2'b10:q=1'b1;
+             2'b11:q=~q;
+             default:q=1'bx;
+           endcase
+        end
+      end
+ endmodule 
+
+//JK FF test bench
+
+module jk_tb;
+  reg j,k,clk,rst;
+  wire q;
+  jk_ff dut (j,k,clk,rst,q);
+  initial begin
+    clk=0;
+    forever #5 clk=~clk;
+  end
+  initial begin
+    $monitor("time=%0t clk=%0b rst=%0b j=%0b k=%0b | q=%0b ~q=%0b",$time,clk,rst,j,k,q,~q);
+    {rst,j,k}=3'b100;
+    #10 {rst,j,k}=3'b100;
+    #10 {rst,j,k}=3'b001;
+    #10 {rst,j,k}=3'b010;
+    
+    #10 {rst,j,k}=3'b000;
+    #10 {rst,j,k}=3'b001;
+    #10 {rst,j,k}=3'b011;
+    #10 {rst,j,k}=3'b010;
+    #10 {rst,j,k}=3'b011;
+    #10
+  $finish;
+  end
+endmodule
