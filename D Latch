@@ -1,0 +1,57 @@
+//D Latch
+module dlatch(input d,en,rst,output reg q);
+  always@(*)
+    begin
+      if(rst)
+        q=0;//blocking and non blocking both are same in latches
+      
+      
+      else if(en==1)
+        q<=d;
+      else
+        q<=q;
+      
+            
+//       else
+//         begin
+//         if(en)
+//           q=d;
+//         end
+      
+ /*Time=0 rst=1 en=0 d=0 | q=0 
+ Time=1 rst=0 en=1 d=0 | q=0 
+ Time=2 rst=0 en=1 d=1 | q=1 
+ Time=3 rst=0 en=0 d=0 | q=1 
+ Time=4 rst=0 en=0 d=1 | q=1 */
+      
+
+      
+//       else 
+//         q<=d;
+ /*Time=0 rst=1 en=0 d=0 | q=0 
+ Time=1 rst=0 en=1 d=0 | q=0 
+ Time=2 rst=0 en=1 d=1 | q=1 
+ Time=3 rst=0 en=0 d=0 | q=0 
+ Time=4 rst=0 en=0 d=1 | q=1 */
+    end
+endmodule
+
+//D Latch test bench
+module tb;
+  reg d;
+  reg en;
+  reg rst;
+  wire q;
+  dlatch dut (d,en,rst,q);
+  initial begin
+    $dumpfile("dlatch.vcd");
+    $dumpvars(1,tb);
+    $monitor("Time=%0t rst=%b en=%b d=%b | q=%b ",$time,rst,en,d,q);
+    rst=1;d=0;en=0;#1
+     rst=0;d=0;en=1;#1
+     rst=0;d=1;en=1;#1
+     rst=0;d=0;en=0;#1
+     rst=0;d=1;en=0;#1
+    $finish;
+  end
+endmodule
