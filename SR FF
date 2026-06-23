@@ -1,0 +1,44 @@
+//SR FF
+module sr_ff(input s,r,clk,rst,output reg q);
+  always @ (negedge clk)
+    begin
+      if(rst)
+        q<=0;
+      else
+        begin
+          case({s,r})
+             2'b00:q=q;
+             2'b01:q=1'b0;
+             2'b10:q=1'b1;
+             2'b11:q=1'bx;
+             default:q=1'bx;
+           endcase
+        end
+      end
+ endmodule      
+
+// SR test bench
+
+module sr_tb;
+  reg r,s,clk,rst;
+  wire q;
+  sr_ff dut (s,r,clk,rst,q);
+  initial begin
+    clk=0;
+    forever #5 clk=~clk;
+  end
+  initial begin
+    $monitor("time=%0t clk=%0b rst=%0b s=%0b r=%0b | q=%0b ~q=%0b",$time,clk,rst,s,r,q,~q);
+    {rst,s,r}=3'b100;
+    #10 {rst,s,r}=3'b000;
+    #10 {rst,s,r}=3'b001;
+    #10 {rst,s,r}=3'b010;
+    #10 {rst,s,r}=3'b011;
+    #10 {rst,s,r}=3'b000;
+    #10 {rst,s,r}=3'b001;
+    #10 {rst,s,r}=3'b010;
+    #10 {rst,s,r}=3'b011;
+    #10
+  $finish;
+  end
+endmodule
