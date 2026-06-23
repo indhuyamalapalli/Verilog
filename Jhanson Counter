@@ -1,0 +1,33 @@
+// Jhanson Counter
+module jhanson #(parameter N=4)(input clk,rst,output  reg [N-1:0]q);
+  always @(posedge clk)
+    begin
+      if(rst)
+        q<=0;
+      else
+        begin
+          q<={~q[0],q[N-1:1]};
+        end
+    end
+endmodule
+
+//test bench
+
+module tb;
+  parameter N=4;
+  reg clk,rst;
+  wire [(N)-1:0]q;
+jhanson  #(N) dut(.*);
+  initial clk=0;
+  always #5 clk=~clk;
+  initial begin
+    $dumpfile("jhanson.vcd");
+    $dumpvars(1,tb);
+    $monitor("Time=%0t clk=%0b rst=%0b | q=%0d",$time,clk,rst,q);
+    rst=1;
+    #10
+    rst=0;
+    #100;
+    $finish;
+  end
+endmodule
