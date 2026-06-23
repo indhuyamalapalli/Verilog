@@ -1,0 +1,81 @@
+module mealy_o(input clk,rst,din,output reg done);
+  parameter s0=2'b00;
+  parameter s1=2'b01;
+  parameter s2=2'b10;
+  parameter s3=2'b11;
+  reg [1:0]cs,ns;
+  always @(posedge clk)
+    begin
+      if(rst)
+        cs<=s0;
+      else
+        cs<=ns;
+    end
+  always @(cs or din)
+    begin
+      case(cs)
+        s0:begin
+          ns=din?s1:s0;
+          done=0;
+        end
+
+        s1:begin
+          ns=din?s2:s0;
+          done=0;
+        end
+        s2:begin
+          ns=din?s2:s3;
+          done=0;
+        end
+//         s3:begin
+//           ns<=s0;
+//           done<=din;
+//         end
+        s3:begin
+          ns=din?s1:s0;
+          if(din==1)
+            done=1;
+          else
+            done=0;
+        end
+      endcase
+    end
+endmodule
+
+//test bench
+
+module tb;
+  reg clk,rst,din;
+  wire done;
+  mealy_o dut (.*);
+  initial clk=1;
+    always #5 clk=~clk;
+  initial begin
+    $dumpfile("mealy_overlap.vcd");
+    $dumpvars(1,tb);
+    $monitor("Time=%0t clk=%b rst=%b din=%b | done=%b",$time,clk,rst,din,done);
+    rst=1;
+    #10
+    rst=0;din=1;
+    #10
+     rst=0;din=1;
+    #10
+     rst=0;din=0;
+    #10
+     rst=0;din=1;
+    #10
+     rst=0;din=1;
+    #10
+     rst=0;din=0;
+    #10
+     rst=0;din=1;
+    #10
+    rst=0;din=1;
+    #10
+     rst=0;din=0;
+    #10
+     rst=0;din=1;
+    #10
+    $finish;
+  end
+endmodule
